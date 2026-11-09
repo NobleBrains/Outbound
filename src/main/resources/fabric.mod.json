@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "outbound",
+  "version": "${version}",
+  "name": "Outbound",
+  "description": "Server-side vanilla-faithful enhancements.",
+  "authors": [
+    "NobleBrains"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/outbound/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.noblebrains.outbound.OutboundMod"
+    ]
+  },
+  "mixins": [
+    "outbound.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": ">=26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
