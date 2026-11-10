@@ -8,3 +8,6 @@ logs/
 Chat.txt
 *.jar
 !gradle/wrapper/gradle-wrapper.jar
+
+.env
+*.env
