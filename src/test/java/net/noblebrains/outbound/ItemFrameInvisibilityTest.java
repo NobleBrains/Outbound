@@ -22,25 +22,22 @@ public class ItemFrameInvisibilityTest {
     }
 
     @Test
-    @DisplayName("Verify Shift+Right-Click turns Item Frame invisible only when it contains an item")
+    @DisplayName("Verify Shift+Right-Click toggles Item Frame invisibility when it contains an item")
     void testShiftRightClickConditions() {
-        // Feature enabled, not fixed, has item, currently visible, sneaking -> turns invisible
-        assertTrue(ItemFrameInvisibilityHelper.canTurnInvisibleOnShiftInteract(true, false, true, false, true));
+        // Feature enabled, not fixed, has item, sneaking -> toggles invisibility
+        assertTrue(ItemFrameInvisibilityHelper.canToggleInvisibilityOnShiftInteract(true, false, true, true));
 
-        // Empty item frame -> cannot turn invisible
-        assertFalse(ItemFrameInvisibilityHelper.canTurnInvisibleOnShiftInteract(true, false, false, false, true));
+        // Empty item frame -> cannot toggle
+        assertFalse(ItemFrameInvisibilityHelper.canToggleInvisibilityOnShiftInteract(true, false, false, true));
 
-        // Not sneaking (normal right-click) -> normal item rotation, does not trigger invisibility
-        assertFalse(ItemFrameInvisibilityHelper.canTurnInvisibleOnShiftInteract(true, false, true, false, false));
-
-        // Already invisible -> does not re-trigger
-        assertFalse(ItemFrameInvisibilityHelper.canTurnInvisibleOnShiftInteract(true, false, true, true, true));
+        // Not sneaking (normal right-click) -> normal item rotation, does not trigger toggle
+        assertFalse(ItemFrameInvisibilityHelper.canToggleInvisibilityOnShiftInteract(true, false, true, false));
 
         // Fixed item frame -> cannot be modified
-        assertFalse(ItemFrameInvisibilityHelper.canTurnInvisibleOnShiftInteract(true, true, true, false, true));
+        assertFalse(ItemFrameInvisibilityHelper.canToggleInvisibilityOnShiftInteract(true, true, true, true));
 
         // Feature disabled in config -> does not trigger
-        assertFalse(ItemFrameInvisibilityHelper.canTurnInvisibleOnShiftInteract(false, false, true, false, true));
+        assertFalse(ItemFrameInvisibilityHelper.canToggleInvisibilityOnShiftInteract(false, false, true, true));
     }
 
     @Test

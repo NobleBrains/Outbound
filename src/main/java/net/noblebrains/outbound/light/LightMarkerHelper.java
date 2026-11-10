@@ -14,7 +14,7 @@ public class LightMarkerHelper {
     private static final int VERTICAL_RADIUS = 6;
 
     public static void tickPlayer(ServerPlayer player) {
-        if (player.tickCount % 30 != 0) {
+        if (player.tickCount % 20 != 0) {
             return;
         }
         if (player.isCreative() || player.isSpectator() || !player.isHolding(Items.LIGHT)) {

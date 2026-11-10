@@ -29,22 +29,22 @@ public abstract class ItemFrameMixin {
     public abstract SoundEvent getRotateItemSound();
 
     @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
-    private void outbound$shiftRightClickInvisible(
+    private void outbound$shiftRightClickToggleInvisibility(
             Player player,
             InteractionHand hand,
             Vec3 location,
             CallbackInfoReturnable<InteractionResult> cir
     ) {
         ItemFrame self = (ItemFrame) (Object) this;
-        if (ItemFrameInvisibilityHelper.canTurnInvisibleOnShiftInteract(
+        if (ItemFrameInvisibilityHelper.canToggleInvisibilityOnShiftInteract(
                 ItemFrameInvisibilityHelper.isFeatureEnabled(),
                 this.fixed,
                 !this.getItem().isEmpty(),
-                self.isInvisible(),
                 player.isSecondaryUseActive()
         )) {
             if (!player.level().isClientSide()) {
-                self.setInvisible(true);
+                boolean newInvisibility = !self.isInvisible();
+                self.setInvisible(newInvisibility);
                 self.playSound(this.getRotateItemSound(), 1.0F, 1.0F);
                 self.gameEvent(GameEvent.BLOCK_CHANGE, player);
             }

@@ -6,7 +6,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightBlock;
@@ -22,8 +21,7 @@ public abstract class BlockMixin {
     @Inject(method = "playerDestroy", at = @At("TAIL"))
     private void outbound$dropLightOnBreak(ServerLevel level, ServerPlayer player, BlockPos pos, BlockState state, BlockEntity blockEntity, ItemStack tool, CallbackInfo ci) {
         if (state.is(Blocks.LIGHT) && OutboundConfig.get().enableLightBlockSurvivalBreak && !player.isCreative()) {
-            int lightLevel = state.getValue(LightBlock.LEVEL);
-            ItemStack drop = LightBlock.setLightOnStack(new ItemStack(Items.LIGHT), lightLevel);
+            ItemStack drop = LightBlock.setLightOnStack(new ItemStack(Items.LIGHT), 15);
             Block.popResource(level, pos, drop);
         }
     }

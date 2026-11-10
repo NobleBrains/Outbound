@@ -19,6 +19,7 @@
     "FarmlandBlockMixin",
     "ItemFrameMixin",
     "LeashFenceKnotEntityMixin",
+    "LightBlockMixin",
     "MinecraftServerMixin",
     "NameTagItemMixin",
     "PlayerMixin",

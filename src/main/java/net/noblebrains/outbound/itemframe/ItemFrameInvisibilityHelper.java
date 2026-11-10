@@ -11,17 +11,15 @@ public final class ItemFrameInvisibilityHelper {
         return OutboundConfig.get().enableInvisibleItemFrames;
     }
 
-    public static boolean canTurnInvisibleOnShiftInteract(
+    public static boolean canToggleInvisibilityOnShiftInteract(
             boolean featureEnabled,
             boolean isFixed,
             boolean hasItemInFrame,
-            boolean isCurrentlyInvisible,
             boolean isSecondaryUseActive
     ) {
         return featureEnabled
                 && !isFixed
                 && hasItemInFrame
-                && !isCurrentlyInvisible
                 && isSecondaryUseActive;
     }
 
