@@ -36,7 +36,8 @@ public class OutboundCommand {
                 .then(createSnowballKnockbackCommand())
                 .then(createFeatherFallingFarmlandCommand())
                 .then(createLightBreakCommand())
-                .then(createEndermanGriefCommand());
+                .then(createEndermanGriefCommand())
+                .then(createSharedDragonAdvancementCommand());
 
         dispatcher.register(outboundRoot);
     }
@@ -57,7 +58,8 @@ public class OutboundCommand {
                 "\u00a7e/outbound snowballKnockback [bool|toggle] \u00a77- Snowball knockback: " + (cfg.enableSnowballPlayerKnockback ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
                 "\u00a7e/outbound featherFallingFarmland [bool|toggle] \u00a77- Farmland protection: " + (cfg.featherFallingProtectsFarmland ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
                 "\u00a7e/outbound lightBreak [bool|toggle] \u00a77- Light block survival break: " + (cfg.enableLightBlockSurvivalBreak ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
-                "\u00a7e/outbound endermanGrief [bool|toggle] \u00a77- Enderman grief prevention: " + (cfg.preventEndermanGrief ? "\u00a7aPREVENTED" : "\u00a7cALLOWED")
+                "\u00a7e/outbound endermanGrief [bool|toggle] \u00a77- Enderman grief prevention: " + (cfg.preventEndermanGrief ? "\u00a7aPREVENTED" : "\u00a7cALLOWED") + "\n" +
+                "\u00a7e/outbound sharedDragonAdvancement [bool|toggle] \u00a77- Shared Dragon kill advancement: " + (cfg.enableSharedDragonKillAdvancement ? "\u00a7aENABLED" : "\u00a7cDISABLED")
         ), false);
         return 1;
     }
@@ -334,6 +336,29 @@ public class OutboundCommand {
         OutboundConfig.get().preventEndermanGrief = prevented;
         OutboundConfig.save();
         source.sendSuccess(() -> Component.literal("\u00a7a[Outbound] Set Enderman grief prevention to: " + prevented + (prevented ? " (\u00a7aENABLED - blocks safe\u00a7r)" : " (\u00a7cDISABLED - vanilla griefing\u00a7r)")), true);
+        return 1;
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> createSharedDragonAdvancementCommand() {
+        return Commands.literal("sharedDragonAdvancement")
+                .executes(ctx -> executeQuerySharedDragonAdvancement(ctx.getSource()))
+                .then(Commands.literal("toggle")
+                        .executes(ctx -> executeSetSharedDragonAdvancement(ctx.getSource(), !OutboundConfig.get().enableSharedDragonKillAdvancement)))
+                .then(Commands.argument("enabled", BoolArgumentType.bool())
+                        .executes(ctx -> executeSetSharedDragonAdvancement(ctx.getSource(), BoolArgumentType.getBool(ctx, "enabled")))
+                );
+    }
+
+    private static int executeQuerySharedDragonAdvancement(CommandSourceStack source) {
+        boolean enabled = OutboundConfig.get().enableSharedDragonKillAdvancement;
+        source.sendSuccess(() -> Component.literal("\u00a76[Outbound] Shared Ender Dragon kill advancement: " + (enabled ? "\u00a7aENABLED" : "\u00a7cDISABLED")), false);
+        return 1;
+    }
+
+    private static int executeSetSharedDragonAdvancement(CommandSourceStack source, boolean enabled) {
+        OutboundConfig.get().enableSharedDragonKillAdvancement = enabled;
+        OutboundConfig.save();
+        source.sendSuccess(() -> Component.literal("\u00a7a[Outbound] Set Shared Ender Dragon kill advancement to: " + enabled + (enabled ? " (\u00a7aENABLED\u00a7r)" : " (\u00a7cDISABLED\u00a7r)")), true);
         return 1;
     }
 }

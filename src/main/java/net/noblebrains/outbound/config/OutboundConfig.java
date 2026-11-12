@@ -48,6 +48,8 @@ public class OutboundConfig {
     public int afkTimeoutSeconds = 300;
     public boolean enablePlayerNametagRenaming = true;
     public boolean enableInvisibleItemFrames = true;
+    public boolean enableSharedDragonKillAdvancement = true;
+    public double dragonKillAdvancementRadius = 200.0;
 
     // Debugging
     public boolean debugLogging = false;

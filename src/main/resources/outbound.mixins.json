@@ -10,6 +10,8 @@
     "ChunkMapMixin",
     "ChunkMapTrackedEntityMixin",
     "ClientboundPlayerInfoUpdatePacketEntryMixin",
+    "EnderDragonFightMixin",
+    "EnderDragonMixin",
     "EnderEyeItemMixin",
     "EndermanLeaveBlockMixin",
     "EndermanTakeBlockMixin",
