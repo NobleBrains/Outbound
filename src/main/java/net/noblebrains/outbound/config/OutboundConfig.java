@@ -50,6 +50,9 @@ public class OutboundConfig {
     public boolean enableInvisibleItemFrames = true;
     public boolean enableSharedDragonKillAdvancement = true;
     public double dragonKillAdvancementRadius = 200.0;
+    public boolean fixEnderDragonFlight = true;
+    public boolean enableDragonMultiplayerScaling = true;
+    public double dragonResistancePerExtraPlayer = 0.25;
 
     // Debugging
     public boolean debugLogging = false;

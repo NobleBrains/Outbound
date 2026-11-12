@@ -37,7 +37,9 @@ public class OutboundCommand {
                 .then(createFeatherFallingFarmlandCommand())
                 .then(createLightBreakCommand())
                 .then(createEndermanGriefCommand())
-                .then(createSharedDragonAdvancementCommand());
+                .then(createSharedDragonAdvancementCommand())
+                .then(createDragonFlightFixCommand())
+                .then(createDragonScalingCommand());
 
         dispatcher.register(outboundRoot);
     }
@@ -59,7 +61,9 @@ public class OutboundCommand {
                 "\u00a7e/outbound featherFallingFarmland [bool|toggle] \u00a77- Farmland protection: " + (cfg.featherFallingProtectsFarmland ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
                 "\u00a7e/outbound lightBreak [bool|toggle] \u00a77- Light block survival break: " + (cfg.enableLightBlockSurvivalBreak ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
                 "\u00a7e/outbound endermanGrief [bool|toggle] \u00a77- Enderman grief prevention: " + (cfg.preventEndermanGrief ? "\u00a7aPREVENTED" : "\u00a7cALLOWED") + "\n" +
-                "\u00a7e/outbound sharedDragonAdvancement [bool|toggle] \u00a77- Shared Dragon kill advancement: " + (cfg.enableSharedDragonKillAdvancement ? "\u00a7aENABLED" : "\u00a7cDISABLED")
+                "\u00a7e/outbound sharedDragonAdvancement [bool|toggle] \u00a77- Shared Dragon kill advancement: " + (cfg.enableSharedDragonKillAdvancement ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
+                "\u00a7e/outbound dragonFlightFix [bool|toggle] \u00a77- Dragon flight fix (26.4 backport): " + (cfg.fixEnderDragonFlight ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
+                "\u00a7e/outbound dragonScaling [bool|toggle] \u00a77- Dragon multiplayer scaling: " + (cfg.enableDragonMultiplayerScaling ? "\u00a7aENABLED" : "\u00a7cDISABLED")
         ), false);
         return 1;
     }
@@ -359,6 +363,52 @@ public class OutboundCommand {
         OutboundConfig.get().enableSharedDragonKillAdvancement = enabled;
         OutboundConfig.save();
         source.sendSuccess(() -> Component.literal("\u00a7a[Outbound] Set Shared Ender Dragon kill advancement to: " + enabled + (enabled ? " (\u00a7aENABLED\u00a7r)" : " (\u00a7cDISABLED\u00a7r)")), true);
+        return 1;
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> createDragonFlightFixCommand() {
+        return Commands.literal("dragonFlightFix")
+                .executes(ctx -> executeQueryDragonFlightFix(ctx.getSource()))
+                .then(Commands.literal("toggle")
+                        .executes(ctx -> executeSetDragonFlightFix(ctx.getSource(), !OutboundConfig.get().fixEnderDragonFlight)))
+                .then(Commands.argument("enabled", BoolArgumentType.bool())
+                        .executes(ctx -> executeSetDragonFlightFix(ctx.getSource(), BoolArgumentType.getBool(ctx, "enabled")))
+                );
+    }
+
+    private static int executeQueryDragonFlightFix(CommandSourceStack source) {
+        boolean enabled = OutboundConfig.get().fixEnderDragonFlight;
+        source.sendSuccess(() -> Component.literal("\u00a76[Outbound] Ender Dragon 26.4 flight fix: " + (enabled ? "\u00a7aENABLED" : "\u00a7cDISABLED")), false);
+        return 1;
+    }
+
+    private static int executeSetDragonFlightFix(CommandSourceStack source, boolean enabled) {
+        OutboundConfig.get().fixEnderDragonFlight = enabled;
+        OutboundConfig.save();
+        source.sendSuccess(() -> Component.literal("\u00a7a[Outbound] Set Ender Dragon 26.4 flight fix to: " + enabled + (enabled ? " (\u00a7aENABLED\u00a7r)" : " (\u00a7cDISABLED\u00a7r)")), true);
+        return 1;
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> createDragonScalingCommand() {
+        return Commands.literal("dragonScaling")
+                .executes(ctx -> executeQueryDragonScaling(ctx.getSource()))
+                .then(Commands.literal("toggle")
+                        .executes(ctx -> executeSetDragonScaling(ctx.getSource(), !OutboundConfig.get().enableDragonMultiplayerScaling)))
+                .then(Commands.argument("enabled", BoolArgumentType.bool())
+                        .executes(ctx -> executeSetDragonScaling(ctx.getSource(), BoolArgumentType.getBool(ctx, "enabled")))
+                );
+    }
+
+    private static int executeQueryDragonScaling(CommandSourceStack source) {
+        boolean enabled = OutboundConfig.get().enableDragonMultiplayerScaling;
+        source.sendSuccess(() -> Component.literal("\u00a76[Outbound] Ender Dragon multiplayer resistance scaling: " + (enabled ? "\u00a7aENABLED" : "\u00a7cDISABLED")), false);
+        return 1;
+    }
+
+    private static int executeSetDragonScaling(CommandSourceStack source, boolean enabled) {
+        OutboundConfig.get().enableDragonMultiplayerScaling = enabled;
+        OutboundConfig.save();
+        source.sendSuccess(() -> Component.literal("\u00a7a[Outbound] Set Ender Dragon multiplayer resistance scaling to: " + enabled + (enabled ? " (\u00a7aENABLED\u00a7r)" : " (\u00a7cDISABLED\u00a7r)")), true);
         return 1;
     }
 }
