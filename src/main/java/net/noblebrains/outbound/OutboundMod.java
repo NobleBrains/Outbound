@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.noblebrains.outbound.command.OutboundCommand;
 import net.noblebrains.outbound.config.OutboundConfig;
 import net.noblebrains.outbound.light.LightMarkerHelper;
+import net.noblebrains.outbound.xp.XpBottlingHandler;
 import net.minecraft.server.level.ServerPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,9 @@ public class OutboundMod implements ModInitializer {
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             OutboundCommand.register(dispatcher);
         });
+
+        // Register XP bottling handler (Shift + Right-Click with empty Glass Bottle)
+        XpBottlingHandler.register();
 
         LOGGER.info("Outbound fully initialized with high-efficiency ticking architecture!");
     }

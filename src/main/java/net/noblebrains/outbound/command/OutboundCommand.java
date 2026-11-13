@@ -39,7 +39,9 @@ public class OutboundCommand {
                 .then(createEndermanGriefCommand())
                 .then(createSharedDragonAdvancementCommand())
                 .then(createDragonFlightFixCommand())
-                .then(createDragonScalingCommand());
+                .then(createDragonScalingCommand())
+                .then(createShulkerPickBlockCommand())
+                .then(createXpBottlingCommand());
 
         dispatcher.register(outboundRoot);
     }
@@ -63,7 +65,9 @@ public class OutboundCommand {
                 "\u00a7e/outbound endermanGrief [bool|toggle] \u00a77- Enderman grief prevention: " + (cfg.preventEndermanGrief ? "\u00a7aPREVENTED" : "\u00a7cALLOWED") + "\n" +
                 "\u00a7e/outbound sharedDragonAdvancement [bool|toggle] \u00a77- Shared Dragon kill advancement: " + (cfg.enableSharedDragonKillAdvancement ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
                 "\u00a7e/outbound dragonFlightFix [bool|toggle] \u00a77- Dragon flight fix (26.4 backport): " + (cfg.fixEnderDragonFlight ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
-                "\u00a7e/outbound dragonScaling [bool|toggle] \u00a77- Dragon multiplayer scaling: " + (cfg.enableDragonMultiplayerScaling ? "\u00a7aENABLED" : "\u00a7cDISABLED")
+                "\u00a7e/outbound dragonScaling [bool|toggle] \u00a77- Dragon multiplayer scaling: " + (cfg.enableDragonMultiplayerScaling ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
+                "\u00a7e/outbound shulkerPickBlock [bool|toggle] \u00a77- Shulker box pick-block: " + (cfg.enableShulkerBoxPickBlock ? "\u00a7aENABLED" : "\u00a7cDISABLED") + "\n" +
+                "\u00a7e/outbound xpBottling [bool|toggle] \u00a77- XP bottling (" + cfg.xpBottlingCost + " XP): " + (cfg.enableXpBottling ? "\u00a7aENABLED" : "\u00a7cDISABLED")
         ), false);
         return 1;
     }
@@ -409,6 +413,52 @@ public class OutboundCommand {
         OutboundConfig.get().enableDragonMultiplayerScaling = enabled;
         OutboundConfig.save();
         source.sendSuccess(() -> Component.literal("\u00a7a[Outbound] Set Ender Dragon multiplayer resistance scaling to: " + enabled + (enabled ? " (\u00a7aENABLED\u00a7r)" : " (\u00a7cDISABLED\u00a7r)")), true);
+        return 1;
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> createShulkerPickBlockCommand() {
+        return Commands.literal("shulkerPickBlock")
+                .executes(ctx -> executeQueryShulkerPickBlock(ctx.getSource()))
+                .then(Commands.literal("toggle")
+                        .executes(ctx -> executeSetShulkerPickBlock(ctx.getSource(), !OutboundConfig.get().enableShulkerBoxPickBlock)))
+                .then(Commands.argument("enabled", BoolArgumentType.bool())
+                        .executes(ctx -> executeSetShulkerPickBlock(ctx.getSource(), BoolArgumentType.getBool(ctx, "enabled")))
+                );
+    }
+
+    private static int executeQueryShulkerPickBlock(CommandSourceStack source) {
+        boolean enabled = OutboundConfig.get().enableShulkerBoxPickBlock;
+        source.sendSuccess(() -> Component.literal("\u00a76[Outbound] Shulker Box pick-block: " + (enabled ? "\u00a7aENABLED" : "\u00a7cDISABLED")), false);
+        return 1;
+    }
+
+    private static int executeSetShulkerPickBlock(CommandSourceStack source, boolean enabled) {
+        OutboundConfig.get().enableShulkerBoxPickBlock = enabled;
+        OutboundConfig.save();
+        source.sendSuccess(() -> Component.literal("\u00a7a[Outbound] Set Shulker Box pick-block to: " + enabled + (enabled ? " (\u00a7aENABLED\u00a7r)" : " (\u00a7cDISABLED\u00a7r)")), true);
+        return 1;
+    }
+
+    private static LiteralArgumentBuilder<CommandSourceStack> createXpBottlingCommand() {
+        return Commands.literal("xpBottling")
+                .executes(ctx -> executeQueryXpBottling(ctx.getSource()))
+                .then(Commands.literal("toggle")
+                        .executes(ctx -> executeSetXpBottling(ctx.getSource(), !OutboundConfig.get().enableXpBottling)))
+                .then(Commands.argument("enabled", BoolArgumentType.bool())
+                        .executes(ctx -> executeSetXpBottling(ctx.getSource(), BoolArgumentType.getBool(ctx, "enabled")))
+                );
+    }
+
+    private static int executeQueryXpBottling(CommandSourceStack source) {
+        boolean enabled = OutboundConfig.get().enableXpBottling;
+        source.sendSuccess(() -> Component.literal("\u00a76[Outbound] XP bottling (" + OutboundConfig.get().xpBottlingCost + " XP/bottle): " + (enabled ? "\u00a7aENABLED" : "\u00a7cDISABLED")), false);
+        return 1;
+    }
+
+    private static int executeSetXpBottling(CommandSourceStack source, boolean enabled) {
+        OutboundConfig.get().enableXpBottling = enabled;
+        OutboundConfig.save();
+        source.sendSuccess(() -> Component.literal("\u00a7a[Outbound] Set XP bottling to: " + enabled + (enabled ? " (\u00a7aENABLED\u00a7r)" : " (\u00a7cDISABLED\u00a7r)")), true);
         return 1;
     }
 }

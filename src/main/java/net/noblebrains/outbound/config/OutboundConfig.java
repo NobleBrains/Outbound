@@ -53,6 +53,9 @@ public class OutboundConfig {
     public boolean fixEnderDragonFlight = true;
     public boolean enableDragonMultiplayerScaling = true;
     public double dragonResistancePerExtraPlayer = 0.25;
+    public boolean enableShulkerBoxPickBlock = true;
+    public boolean enableXpBottling = false;
+    public int xpBottlingCost = 25;
 
     // Debugging
     public boolean debugLogging = false;
